@@ -1,0 +1,10 @@
+browser hide all
+browser position chrX:1-1000
+track name="track 1" description='first track' priority=1
+chrX	1	100
+chrX	25	250
+chr5	90	91
+
+track name='track 2' description='second track' itemRgb=1 useScore=1 db=dm3 color=0,0,0 visibility=2 offset=2
+chr1	20000000	30000000
+chr3	1	9

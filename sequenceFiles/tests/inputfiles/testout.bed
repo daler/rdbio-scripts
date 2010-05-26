@@ -1,0 +1,5 @@
+track name="test file" priority=1 useScore=1 description="try to break me!"
+chr10	200	6001
+chr10	1000000	1200000
+chr9	2	601
+chr4	45	634
