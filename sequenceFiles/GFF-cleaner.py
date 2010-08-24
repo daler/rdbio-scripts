@@ -28,11 +28,9 @@ culled_features = ['orthologous_to', 'pcr_product', 'BAC_cloned_genomic_insert']
 
 f = GFFutils.GFFFile(gfffn)
 for feature in f:
-    if feature.start is None:
+    if (feature.start is None) or (feature.stop is None):
         continue
-    if feature.stop is None:
-        continue
-    if feature.start > feature.stop:
+    if (feature.start<0) or (feature.stop<0) or (feature.start > feature.stop):
         continue
     if feature.featuretype in culled_features:
         continue
