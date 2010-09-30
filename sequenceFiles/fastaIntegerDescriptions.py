@@ -17,16 +17,16 @@ op.add_option('-o', dest='outfn', help='Output FASTA file, with integers as desc
 __doc__ += op.format_help()
 
 def fastaIntegerDescriptions(infile,outfile):
-    def seq_iterator(handle):
+    def seq_iterator(fn):
         count = 0
-        for i in SeqIO.parse(open(fin),'fasta'):
+        for i in SeqIO.parse(fn,'fasta'):
             c = str(count)
             i.description = c
             i.id = c
             i.name = c
             count += 1
             yield i
-    SeqIO.write(seq_iterator(handle), outfile, 'fasta')
+    SeqIO.write(seq_iterator(infile), outfile, 'fasta')
 
 
 if __name__ == "__main__":
