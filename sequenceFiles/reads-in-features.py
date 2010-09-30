@@ -65,7 +65,7 @@ op.add_option('--debug',action='store_true',
               help='Creates useful output, like BEDs and WIGs of counted reads, '
                    'useful for debugging or digging deeper into the returned counts. (optional)')
 op.add_option('--verbose',action='store_true',help='Print progress to stderr (optional)')
-op.add_option('--label',,help='Label for library that will be added to the top of count reports '
+op.add_option('--label',help='Label for library that will be added to the top of count reports '
                               'and will be prefixed to track names if --debug is enabled (default '
                               'is to use the basename of the SAM file)')
 options,args = op.parse_args()
