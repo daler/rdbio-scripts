@@ -205,8 +205,14 @@ def clusters(infn, filetype, use_strand='.',verbose=False):
     except KeyError:
         raise ValueError, "Input filetype %s not supported; only %s currently supported" % (filetype,dispatch_dict.keys())
 
+    # If there's nothing in the iterator, then don't return the last cluster
+    # (since there won't be one)
+    ret_last = False
     last_chrom = None
     for chrom,start,stop,strand in iterator:
+        # If we enter this loop, there's something in the iterator and so we
+        # will eventually have to return the last cluster. 
+        ret_last = True
         if use_strand != '.':
             if strand != use_strand:
                 continue
@@ -239,8 +245,9 @@ def clusters(infn, filetype, use_strand='.',verbose=False):
             features = [(start,stop)]
             
 
-    # Return the last cluster (since it won't be yielded by the else-clause above)
-    yield chrom, cluster_start, cluster_stop, features
+    if ret_last:
+        # Return the last cluster (since it won't be yielded by the else-clause above)
+        yield chrom, cluster_start, cluster_stop, features
 
 def make_wig(infn, filetype, outfn=None, use_strand='.',trackinfo=None,verbose=False):
     """
@@ -260,8 +267,9 @@ def make_wig(infn, filetype, outfn=None, use_strand='.',trackinfo=None,verbose=F
     fout.write('track type=wiggle_0 alwaysZero=on %s\n' % trackinfo)
 
     
-    for chrom, cluster_start, cluster_stop, features in clusters(infn, filetype, use_strand):
-
+    for chrom, cluster_start, cluster_stop, features in clusters(infn, filetype, use_strand, verbose):
+        if chrom is None:
+            continue
         # Add 1 to cluster_start to shift WIG features so they look right in the browser (which is 1-based)
         fout.write('fixedStep chrom=%s start=%s step=1\n' % (chrom,cluster_start+1))
         cluster_len = cluster_stop - cluster_start
@@ -308,4 +316,4 @@ if __name__ == '__main__':
         input_handle = sys.stdin
     else:
         input_handle = open(options.input)
-    make_wig(input_handle, options.type, options.output, options.strand, options.track)
+    make_wig(input_handle, options.type, options.output, options.strand, options.track,options.verbose)
