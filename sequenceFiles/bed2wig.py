@@ -212,10 +212,12 @@ def clusters(infn, filetype, use_strand='.',verbose=False):
     for chrom,start,stop,strand in iterator:
         # If we enter this loop, there's something in the iterator and so we
         # will eventually have to return the last cluster. 
-        ret_last = True
         if use_strand != '.':
             if strand != use_strand:
                 continue
+
+        ret_last = True
+
         # If we're on a new chromosome, reset everything.
         if chrom != last_chrom:
             if verbose:
