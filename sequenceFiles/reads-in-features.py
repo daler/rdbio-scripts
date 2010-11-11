@@ -68,6 +68,7 @@ op.add_option('--verbose',action='store_true',help='Print progress to stderr (op
 op.add_option('--label',help='Label for library that will be added to the top of count reports '
                               'and will be prefixed to track names if --debug is enabled (default '
                               'is to use the basename of the SAM file)')
+op.add_option('--stranded',action='store_true',help='stranded counting')
 options,args = op.parse_args()
 
 reqs = ['sam','gff','outprefix']
@@ -139,7 +140,7 @@ for ft in featuretypes:
 # Here we go: time to read in the GFF features as an HTSeq.GenomicArrayOfSets
 featurecount = 0
 gff = HTSeq.GFF_Reader(options.gff)
-features = HTSeq.GenomicArrayOfSets([],stranded=False)
+features = HTSeq.GenomicArrayOfSets([],stranded=options.stranded)
 try:
     for f in gff:
         featurecount += 1
@@ -276,7 +277,10 @@ try:
             if 'empty' in featuretypes_to_count:
                 if len(featuretypes_to_count) != 1:
                     if 'spliced' not in featuretypes_to_count:
-                        pdb.set_trace()
+                        # this could happen if you're counting stranded and
+                        # there are no reads on the strand you're looking for
+                        pass
+                        #pdb.set_trace()
             
             # increment all featuretypes that were found here
             for featuretype in featuretypes_to_count:
